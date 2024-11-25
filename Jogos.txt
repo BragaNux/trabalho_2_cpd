@@ -21,3 +21,30 @@
 21,The Mageseeker: A League of Legends Story™,Digital Sun,88,RPG,Hack and Slash
 22,Baldur's Gate 3,Larian Studios,199,RPG,Escolhas
 23,Sticky Business,Spellgarden Games,22,Simulação,Indie
+24,Red Dead Redemption 2,Rockstar Games,250,Ação,Aventura
+25,Spider-Man: Miles Morales,Insomniac Games,190,Ação,Super-heróis
+26,Elden Ring,FromSoftware,289,RPG,Ação
+27,Final Fantasy XVI,Square Enix,320,RPG,Fantasia
+28,God of War: Ragnarok,Santa Monica Studio,299,Ação,Mitologia
+29,Hollow Knight: Silksong,Team Cherry,100,Indie,Plataforma
+30,No Man's Sky,Hello Games,150,Exploração,Sobrevivência
+31,Among Us,InnerSloth,15,Multiplayer,Indie
+32,Hades,Supergiant Games,95,RPG,Roguelike
+33,Slime Rancher 2,Monomi Park,110,Simulação,Aventura
+34,The Legend of Zelda: Breath of the Wild,Nintendo,300,Aventura,RPG
+35,Pokemon Scarlet and Violet,Game Freak,250,RPG,Aventura
+36,Minecraft,Mojang Studios,129,Sandbox,Construção
+37,League of Legends,Riot Games,0,MOBA,Competitivo
+38,Valorant,Riot Games,0,Tiro,Competitivo
+39,Overwatch 2,Blizzard Entertainment,0,Tiro,Heróis
+40,Apex Legends,Respawn Entertainment,0,Tiro,Battle Royale
+41,FIFA 23,EA Sports,299,Esportes,Futebol
+42,The Sims 4,Maxis,99,Simulação,Vida
+43,Starfield,Bethesda Game Studios,349,Exploração,Ficção Científica
+44,Call of Duty: Modern Warfare II,Infinity Ward,299,Tiro,Guerra
+45,Forza Horizon 5,Playground Games,199,Corrida,Exploração
+46,Gran Turismo 7,Polyphony Digital,299,Corrida,Realista
+47,It Takes Two,Hazelight Studios,150,Coop,Aventura
+48,Uncharted 4,Naughty Dog,250,Ação,Aventura
+49,Dark Souls III,FromSoftware,199,RPG,Ação
+50,Doki Doki Literature Club,Team Salvato,0,Psychological Horror,Indie
