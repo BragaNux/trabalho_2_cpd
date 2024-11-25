@@ -135,7 +135,6 @@ http://127.0.0.1:5000/
 ## O que foi Implementado
 - **BST**: Gerenciamento e busca por preço.
 - **Hash Table**: Gerenciamento e busca por gênero.
-- **Filtro de ID**: Busca de jogo por ID.
 - **Interface Gráfica**: Upload de arquivos, aplicação de filtros e exibição de resultados.
 - **Exportação**: Geração de arquivo `.csv` com os jogos filtrados.
 - **Mensagens informativas**: Feedback ao usuário em caso de erro ou sucesso.
