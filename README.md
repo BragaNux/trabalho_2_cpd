@@ -1,7 +1,7 @@
 # Mini-Steam: Classificação e Pesquisa de Jogos
 
 ## Sobre o Projeto
-O **Mini-Steam** é um sistema de classificação e pesquisa de jogos para uma loja digital. Este projeto foi desenvolvido como parte de um trabalho acadêmico com o objetivo de implementar um mecanismo de busca eficiente para jogos baseado em preço e gênero, utilizando estruturas de dados como Árvore Binária de Busca (BST) e Hash Table.
+O **Mini-Steam** é um sistema de classificação e pesquisa de jogos. Este projeto foi desenvolvido como parte de um trabalho acadêmico com o objetivo de implementar um mecanismo de busca eficiente para jogos baseado em preço e gênero, utilizando estruturas de dados como Árvore Binária de Busca (BST) e Hash Table.
 
 O sistema permite que os usuários filtrem e busquem jogos com base em critérios como:
 - Preço exato.
