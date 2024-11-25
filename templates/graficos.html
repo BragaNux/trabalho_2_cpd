@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficos de Jogos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .filter-buttons {
+            margin-bottom: 20px;
+        }
+        .active-filter {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Distribuição de Jogos</h1>
+
+        <!-- Botões para selecionar tipo de gráfico -->
+        <div class="text-center filter-buttons">
+            <form action="/graficos/ordenar" method="POST" style="display: inline;">
+                <input type="hidden" name="criterio" value="preco_desc">
+                <button type="submit" class="btn btn-primary">Ordem por Preço</button>
+            </form>
+            <form action="/graficos/ordenar" method="POST" style="display: inline;">
+                <input type="hidden" name="criterio" value="nome_alfabetico">
+                <button type="submit" class="btn btn-secondary">Ordem Alfabética por Nome</button>
+            </form>
+            <form action="/graficos/ordenar" method="POST" style="display: inline;">
+                <input type="hidden" name="criterio" value="desenvolvedor_alfabetico">
+                <button type="submit" class="btn btn-info">Ordem Alfabética por Desenvolvedor</button>
+            </form>
+            <form action="/graficos/ordenar" method="POST" style="display: inline;">
+                <input type="hidden" name="criterio" value="genero_alfabetico">
+                <button type="submit" class="btn btn-success">Ordem Alfabética por Gênero</button>
+            </form>
+        </div>
+
+        <!-- Área do Gráfico -->
+        <div class="mt-4">
+            <canvas id="chartGenero" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dados recebidos do backend
+        const labels = JSON.parse('{{ titulos | tojson | safe }}');
+        const data = JSON.parse('{{ precos | tojson | safe }}');
+        const developers = JSON.parse('{{ desenvolvedores | tojson | safe }}');
+
+        // Configurando o gráfico
+        const ctx = document.getElementById('chartGenero').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Preço dos Jogos (R$)',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `Preço: R$ ${tooltipItem.raw}`;
+                            },
+                            afterLabel: function(context) {
+                                return `Desenvolvedor: ${developers[context.dataIndex]}`;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Preço (R$)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Títulos'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
