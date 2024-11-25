@@ -1,125 +1,119 @@
+from flask import Flask, render_template, request, redirect, flash
+import os
+import re
+
+app = Flask(__name__)
+app.secret_key = 'chave_secreta_para_flash_messages'
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+
 class Jogo:
     def __init__(self, jogo_id, titulo, desenvolvedor, preco, generos):
         self.jogo_id = jogo_id
         self.titulo = titulo
         self.desenvolvedor = desenvolvedor
         self.preco = preco
-        self.generos = generos 
+        self.generos = generos
 
-class NoJogo:
-    def __init__(self, jogo):
-        self.jogo = jogo
-        self.esquerda = None
-        self.direita = None
-
-class ArvoreJogos:
-    def __init__(self):
-        self.raiz = None
-
-    def inserir(self, jogo):
-        def inserir_no(no_atual, novo_no):
-            if novo_no.jogo.preco < no_atual.jogo.preco:
-                if no_atual.esquerda is None:
-                    no_atual.esquerda = novo_no
-                else:
-                    inserir_no(no_atual.esquerda, novo_no)
-            else:
-                if no_atual.direita is None:
-                    no_atual.direita = novo_no
-                else:
-                    inserir_no(no_atual.direita, novo_no)
-
-        novo_no = NoJogo(jogo)
-        if self.raiz is None:
-            self.raiz = novo_no
-        else:
-            inserir_no(self.raiz, novo_no)
-
-    def buscar_por_preco(self, preco):
-        resultados = []
-
-        def buscar(no_atual):
-            if no_atual is None:
-                return
-            if no_atual.jogo.preco == preco:
-                resultados.append(no_atual.jogo)
-            if preco < no_atual.jogo.preco:
-                buscar(no_atual.esquerda)
-            else:
-                buscar(no_atual.direita)
-
-        buscar(self.raiz)
-        return resultados
-
-    def busca_por_faixa_preco(self, preco_minimo, preco_maximo):
-        resultados = []
-
-        def buscar(no_atual):
-            if no_atual is None:
-                return
-            if preco_minimo <= no_atual.jogo.preco <= preco_maximo:
-                resultados.append(no_atual.jogo)
-            if preco_minimo < no_atual.jogo.preco:
-                buscar(no_atual.esquerda)
-            if preco_maximo > no_atual.jogo.preco:
-                buscar(no_atual.direita)
-
-        buscar(self.raiz)
-        return resultados
-
-class HashGeneros:
-    def __init__(self):
-        self.genero_para_jogos = {}
-
-    def adicionar_jogo(self, jogo):
-        for genero in jogo.generos:
-            if genero not in self.genero_para_jogos:
-                self.genero_para_jogos[genero] = []
-            self.genero_para_jogos[genero].append(jogo)
-
-    def obter_jogos(self, genero):
-        return self.genero_para_jogos.get(genero, [])
 
 class MotorBuscaJogos:
     def __init__(self):
-        self.catalogo_jogos = ArvoreJogos()
-        self.generos = HashGeneros()
+        self.jogos = []
 
-    def carregar_jogos_de_arquivo(self, arquivo):
-        with open(arquivo, "r") as file:
-            for linha in file:
-                dados = linha.strip().split(",")
-                jogo_id = int(dados[0])
-                titulo = dados[1]
-                desenvolvedor = dados[2]
-                preco = int(dados[3])
-                generos = dados[4:]
-                jogo = Jogo(jogo_id, titulo, desenvolvedor, preco, generos)
-                self.catalogo_jogos.inserir(jogo)
-                self.generos.adicionar_jogo(jogo)
+    def carregar_jogos_de_arquivo(self, arquivo_caminho):
+        try:
+            with open(arquivo_caminho, 'r', encoding='utf-8') as file:
+                self.jogos = []
+                for linha in file:
+                    dados = linha.strip().split(",")
+                    jogo_id = int(dados[0])
+                    titulo = dados[1]
+                    desenvolvedor = dados[2]
+                    preco = float(dados[3].replace(",", "."))
+                    generos = dados[4:]
+                    jogo = Jogo(jogo_id, titulo, desenvolvedor, preco, generos)
+                    self.jogos.append(jogo)
+        except Exception as e:
+            print(f"Erro ao carregar arquivo: {e}")
+
+    def buscar_todos(self):
+        return self.jogos
 
     def buscar_por_preco(self, preco):
-        return self.catalogo_jogos.buscar_por_preco(preco)
+        return [jogo for jogo in self.jogos if jogo.preco == preco]
 
     def buscar_por_faixa_preco(self, preco_min, preco_max):
-        return self.catalogo_jogos.busca_por_faixa_preco(preco_min, preco_max)
+        return [jogo for jogo in self.jogos if preco_min <= jogo.preco <= preco_max]
 
     def buscar_por_genero(self, genero):
-        return self.generos.obter_jogos(genero)
+        return [jogo for jogo in self.jogos if genero in jogo.generos]
 
-#testes
+    def buscar_gratis(self):
+        return [jogo for jogo in self.jogos if jogo.preco == 0]
+
+    def obter_generos_unicos(self):
+        generos = set()
+        for jogo in self.jogos:
+            generos.update(jogo.generos)
+        return sorted(generos)
+
+
+# Instância global do motor de busca
+motor_busca = MotorBuscaJogos()
+
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    filtros_visiveis = False
+    jogos = []
+    generos_disponiveis = []
+
+    if request.method == "POST" and 'upload' in request.form:
+        file = request.files['file']
+        if file.filename == '':
+            flash("Nenhum arquivo selecionado!", "danger")
+            return redirect("/")
+        if file:
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(filepath)
+            motor_busca.carregar_jogos_de_arquivo(filepath)
+            flash("Arquivo carregado com sucesso!", "success")
+            filtros_visiveis = True
+            generos_disponiveis = motor_busca.obter_generos_unicos()
+
+    if request.method == "POST" and 'filtrar' in request.form:
+        genero = request.form.get("genero")
+        preco_min = request.form.get("preco_min")
+        preco_max = request.form.get("preco_max")
+        preco_exato = request.form.get("preco_exato")
+        apenas_gratis = request.form.get("gratis") == "on"
+        filtros_visiveis = True
+        generos_disponiveis = motor_busca.obter_generos_unicos()
+
+        # Aplicar filtros
+        jogos = motor_busca.buscar_todos()
+        if preco_exato:
+            preco_exato = float(preco_exato.replace(",", "."))
+            jogos = [jogo for jogo in jogos if jogo.preco == preco_exato]
+        if preco_min and preco_max:
+            preco_min = float(preco_min.replace(",", "."))
+            preco_max = float(preco_max.replace(",", "."))
+            jogos = [jogo for jogo in jogos if preco_min <= jogo.preco <= preco_max]
+        if genero:
+            jogos = [jogo for jogo in jogos if genero in jogo.generos]
+        if apenas_gratis:
+            jogos = [jogo for jogo in jogos if jogo.preco == 0]
+
+        # Exibir mensagem se nenhum resultado for encontrado
+        if not jogos:
+            flash("Nenhum resultado encontrado com os filtros aplicados!", "warning")
+
+    return render_template("index.html", filtros_visiveis=filtros_visiveis, jogos=jogos, generos=generos_disponiveis)
+
+
 if __name__ == "__main__":
-    motor_busca = MotorBuscaJogos()
-    motor_busca.carregar_jogos_de_arquivo("jogos.txt")
-
-    print("Busca por preço exato (150):")
-    for jogo in motor_busca.buscar_por_preco(150):
-        print(f"{jogo.titulo} - R${jogo.preco}")
-
-    print("\nBusca por faixa de preços (50 a 200):")
-    for jogo in motor_busca.buscar_por_faixa_preco(50, 200):
-        print(f"{jogo.titulo} - R${jogo.preco}")
-
-    print("\nBusca por gênero (RPG):")
-    for jogo in motor_busca.buscar_por_genero("RPG"):
-        print(f"{jogo.titulo} - Gêneros: {', '.join(jogo.generos)}")
+    app.run(debug=True)
