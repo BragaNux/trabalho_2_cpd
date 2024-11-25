@@ -1,0 +1,23 @@
+1,The Witcher 3,CD Projekt Red,150,RPG,Ação
+2,Stardew Valley,ConcernedApe,40,Indie,Simulação
+3,Doom Eternal,id Software,200,Ação,Tiro
+4,Celeste,Maddy Makes Games,50,Indie,Plataforma
+5,Cyberpunk 2077,CD Projekt Red,180,RPG,Ação
+6,Disco Elysium,ZA/UM,75,RPG,Indie
+7,The Forest,Ice-Pick Lodge,37,Sobrevivência,Exploração
+8,Potion Craft: Alchemist Simulator,niceplay games,59,Simulação,Indie
+9,Dragon Age™ Inquisition,BioWare,209,RPG,Escolhas
+10,Green Hell,Creepy Jar,47,Sobrevivência,Exploração
+11,Monster Prom,Beautiful Glitch,24,Dating Sim,Indie
+12,Little Nightmares,Tarsier Studios,84,Terror,Plataforma
+13,Mouthwashing,Wrong Organ,41,Terror,Indie
+14,Life is Strange,Dontnod Entertainment,36,Ação,Escolhas
+15,Battlefield 4,DICE,199,Tiro,Ação
+16,Stray,BlueTwelve Studio,79,Ação,Exploração
+17,Until Dawn,Ballistic Moon,299,Terror,Escolhas
+18,Detroit: Become Human,Quantic Dream,35,Escolhas,Ação
+19,Pathologic 2,Ice-Pick Lodge,101,Escolhas,Terror
+20,Bear and Breakfast,Gummy Cat,24,Simulação,RPG
+21,The Mageseeker: A League of Legends Story™,Digital Sun,88,RPG,Hack and Slash
+22,Baldur's Gate 3,Larian Studios,199,RPG,Escolhas
+23,Sticky Business,Spellgarden Games,22,Simulação,Indie
